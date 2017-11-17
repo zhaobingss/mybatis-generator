@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<!--数据库驱动 -->
+	<classPathEntry location="mysql-connector-java-5.1.40.jar" />
+	<context id="MysqlTables" targetRuntime="MyBatis3">
+		
+		<!-- mysql关键字加反单引号 -->
+		<property name="autoDelimitKeywords" value="true"/>
+		<property name="beginningDelimiter" value="`"/>
+		<property name="endingDelimiter" value="`"/>
+
+		<!-- 生成文件编码 -->
+		<property name="javaFileEncoding" value="UTF-8"/>
+
+		<!-- 是否合并生成的xml文件和已有的xml -->
+		<property name="isXmlMerge" value="true"/>
+		
+		<!-- 是否覆盖java文件 -->
+		<property name="isJavaOverwrite" value="true"/>
+		
+		<!-- 是否合并java文件 -->
+		<property name="isJavaMerge" value="true"/>
+		
+		<!-- 一对一插件 -->
+		<plugin type="org.mybatis.generator.plugins.OneToOnePlugin"/>
+		
+		<!-- 一对多插件 -->
+		<plugin type="org.mybatis.generator.plugins.OneToManyPlugin"/>
+		
+		<commentGenerator type="org.mybatis.generator.internal.ZbssCommentGenerator">
+			<property name="suppressDate" value="true" />
+			<property name="suppressAllComments" value="false" />
+		</commentGenerator>
+		
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://127.0.0.1:3306/travel_gds_qihang" 
+			userId="root"
+			password="root">
+		</jdbcConnection>
+		
+		
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		
+		<!--生成Model类存放位置 -->
+		<javaModelGenerator targetPackage="com.diandong.web.manager.pojo" targetProject="src">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		
+		<!--生成映射文件存放位置 -->
+		<sqlMapGenerator targetPackage="mapper" targetProject="src">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		
+		<!--生成Mapper接口类存放位置 -->
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.diandong.web.manager.dao" targetProject="src">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		
+		<!--
+		<table tableName="price_operate" domainObjectName="PriceOperate"
+			enableCountByExample="false" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+		</table>
+		-->
+		
+		<!-- 主订单信息 -->
+		<table tableName="order_main" domainObjectName="OrderMain"
+			enableCountByExample="false" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+			<oneToOne mappingTable="order_frm" column="id" joinColumn="order_id" where="" />
+		</table>
+		
+		<table tableName="order_frm" domainObjectName="OrderFrm"
+			enableCountByExample="false" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+		</table>
+
+		
+	</context>
+</generatorConfiguration>
