@@ -29,6 +29,11 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.config.*;
 import org.mybatis.generator.internal.util.StringUtility;
 
+/**
+ * @desc 
+ * @author zbss
+ * @date 2017/11/17 22:17
+ */
 public class OneToOnePlugin extends PluginAdapter {
 
 	/**
@@ -159,32 +164,23 @@ public class OneToOnePlugin extends PluginAdapter {
 						}
 					}
 				}
-				String camelColum = "";
-				boolean isUp = false;
-				for (byte b : oneToOne.getColumn().getBytes()) {
-					char c = (char) b;
-					if (c == '_') {
-						isUp = true;
-					} else {
-						if (isUp) {
-							camelColum += new String(new char[]{c}).toUpperCase();
-							isUp = false;
-						} else {
-							camelColum += c;
-						}
+
+				String columnName = oneToOne.getColumn();
+				String columnJavaProp = "";
+				List<IntrospectedColumn> introspectedColumns = introspectedTable.getAllColumns();
+				for (IntrospectedColumn introspectedColumn : introspectedColumns){
+					if (columnName.equals(introspectedColumn.getActualColumnName())){
+						columnJavaProp = introspectedColumn.getJavaProperty();
 					}
 				}
+
 				//添加查询方法<select id="testOutMapper" resultMap="soc.dao.ScanDao.BaseResultMap"><include refid="soc.dao.ScanDao.Base_Column_List" />
 				XmlElement selectEle = new XmlElement("select");
 				selectEle.addAttribute(new Attribute("id", "get" + domainName));
 				selectEle.addAttribute(new Attribute("resultMap", it.getMyBatis3SqlMapNamespace() + ".BaseResultMap"));
 				String sql = "SELECT ";
-				/*for (IntrospectedColumn c : it.getAllColumns()) {
-					sql += c.getActualColumnName() + ",";
-				}*/
 				sql += "<include refid=\""+it.getMyBatis3SqlMapNamespace()+".Base_Column_List"+"\" />";
-//				sql = sql.substring(0, sql.length() - 1);
-				sql += " FROM " + tableName + " WHERE " + oneToOne.getJoinColumn() + "=#{" + camelColum + "}";
+				sql += " FROM " + tableName + " WHERE " + oneToOne.getJoinColumn() + "=#{" + columnJavaProp + "}";
 				if (StringUtility.stringHasValue(oneToOne.getWhere())) {
 					sql += " AND " + oneToOne.getWhere();
 				}

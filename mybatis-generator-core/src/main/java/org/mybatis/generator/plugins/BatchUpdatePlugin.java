@@ -66,7 +66,7 @@ public class BatchUpdatePlugin extends PluginAdapter{
 		// 1.设置方法可见性
 		ibsmethod.setVisibility(JavaVisibility.PUBLIC);
 		// 2.设置返回值类型
-		FullyQualifiedJavaType ibsreturnType = FullyQualifiedJavaType.getIntInstance();// int型
+		FullyQualifiedJavaType ibsreturnType = FullyQualifiedJavaType.getIntInstance();
 		ibsmethod.setReturnType(ibsreturnType);
 		// 3.设置方法名
 		ibsmethod.setName("updateBatchByPrimaryKeySelective");
@@ -78,7 +78,7 @@ public class BatchUpdatePlugin extends PluginAdapter{
 		} else if (introspectedTable.getRules().generatePrimaryKeyClass()) {
 			paramListType = new FullyQualifiedJavaType(introspectedTable.getPrimaryKeyType());
 		} else {
-			throw new RuntimeException(getString("RuntimeError.12")); //$NON-NLS-1$
+			throw new RuntimeException(getString("RuntimeError.12"));
 		}
 		paramType.addTypeArgument(paramListType);
 
