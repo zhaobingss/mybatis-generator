@@ -34,7 +34,7 @@
 <!--
   The generatorConfiguration element is the root element for configurations.
 -->
-<!ELEMENT generatorConfiguration (properties?, classPathEntry*, context+)>
+<!ELEMENT generatorConfiguration (property*, properties?, classPathEntry*, context+)>
                         
 <!--
   The properties element is used to define a standard Java properties file

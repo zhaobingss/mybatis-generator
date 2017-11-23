@@ -3,44 +3,49 @@
   PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
   "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
+
+	<!-- 是否合并生成的xml文件和已有的xml -->
+	<property name="isXmlMerge" value="true"/>
+	<!-- 是否覆盖java文件 -->
+	<property name="isJavaOverwrite" value="true"/>
+	<!-- 是否合并java文件 -->
+	<property name="isJavaMerge" value="true"/>
+	<!-- 生成文件编码 -->
+	<property name="javaFileEncoding" value="UTF-8"/>
+
 	<!--数据库驱动 -->
 	<classPathEntry location="mysql-connector-java-5.1.40.jar" />
+	
+	<!-- 一个连接数据库的上下文环境 -->
 	<context id="MysqlTables" targetRuntime="MyBatis3">
-		
 		<!-- mysql关键字加反单引号 -->
 		<property name="autoDelimitKeywords" value="true"/>
 		<property name="beginningDelimiter" value="`"/>
 		<property name="endingDelimiter" value="`"/>
-
-		<!-- 生成文件编码 -->
-		<property name="javaFileEncoding" value="UTF-8"/>
-
-		<!-- 是否合并生成的xml文件和已有的xml -->
-		<property name="isXmlMerge" value="true"/>
 		
-		<!-- 是否覆盖java文件 -->
-		<property name="isJavaOverwrite" value="true"/>
+		<property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
 		
-		<!-- 是否合并java文件 -->
-		<property name="isJavaMerge" value="true"/>
-		
+		<!-- 生成JPA注解 -->
+		<plugin type="org.mybatis.generator.plugins.JpaAnnotionPlugin"/>
 		<!-- 一对一插件 -->
 		<plugin type="org.mybatis.generator.plugins.OneToOnePlugin"/>
-		
 		<!-- 一对多插件 -->
 		<plugin type="org.mybatis.generator.plugins.OneToManyPlugin"/>
+		<!--生成带RowBounds的方法
+		<plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
+		-->
 		
+		<!-- 自定义注释生成器 -->
 		<commentGenerator type="org.mybatis.generator.internal.ZbssCommentGenerator">
 			<property name="suppressDate" value="true" />
 			<property name="suppressAllComments" value="false" />
 		</commentGenerator>
 		
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://127.0.0.1:3306/travel_gds_qihang" 
-			userId="root"
-			password="root">
+			connectionURL="jdbc:mysql://106.14.178.70:3306/travel_gds_qihang" 
+			userId="qihang668"
+			password="QiHang!@#">
 		</jdbcConnection>
-		
 		
 		<javaTypeResolver>
 			<property name="forceBigDecimals" value="false" />
@@ -75,6 +80,7 @@
 			enableCountByExample="false" enableUpdateByExample="true"
 			enableDeleteByExample="true" enableSelectByExample="true"
 			selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
 			<oneToOne mappingTable="order_frm" column="id" joinColumn="order_id" where="" />
 		</table>
 		
@@ -82,6 +88,7 @@
 			enableCountByExample="false" enableUpdateByExample="true"
 			enableDeleteByExample="true" enableSelectByExample="true"
 			selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
 		</table>
 
 		

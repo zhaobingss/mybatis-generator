@@ -26,13 +26,12 @@ import org.mybatis.generator.logging.slf4j.Slf4jLoggingLogFactory;
 
 /**
  * Factory for creating loggers
- * 
  * @author Jeff Butler
  * 
  */
 public class LogFactory {
     private static AbstractLogFactory logFactory;
-    public static String MARKER = "MYBATIS-GENERATOR"; //$NON-NLS-1$
+    public static String MARKER = "MYBATIS-GENERATOR";
 
     static {
         tryImplementation(new Slf4jLoggingLogFactory());
@@ -47,8 +46,7 @@ public class LogFactory {
         try {
             return logFactory.getLog(clazz);
         } catch (Throwable t) {
-            throw new RuntimeException(getString("RuntimeError.21", //$NON-NLS-1$
-                    clazz.getName(), t.getMessage()), t);
+            throw new RuntimeException(getString("RuntimeError.21",clazz.getName(), t.getMessage()), t);
         }
     }
 
@@ -92,9 +90,7 @@ public class LogFactory {
         if (logFactory == null) {
             try {
                 setImplementation(factory);
-            } catch (LogException e) {
-                // ignore
-            }
+            } catch (LogException e) {}
         }
     }
 

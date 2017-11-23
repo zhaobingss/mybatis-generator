@@ -27,9 +27,6 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 public abstract class PropertyHolder {
     private Properties properties;
 
-    /**
-     *  
-     */
     public PropertyHolder() {
         super();
         properties = new Properties();
@@ -51,11 +48,9 @@ public abstract class PropertyHolder {
         Enumeration<?> enumeration = properties.propertyNames();
         while (enumeration.hasMoreElements()) {
             String propertyName = (String) enumeration.nextElement();
-
-            XmlElement propertyElement = new XmlElement("property"); //$NON-NLS-1$
-            propertyElement.addAttribute(new Attribute("name", propertyName)); //$NON-NLS-1$
-            propertyElement.addAttribute(new Attribute(
-                    "value", properties.getProperty(propertyName))); //$NON-NLS-1$
+            XmlElement propertyElement = new XmlElement("property");
+            propertyElement.addAttribute(new Attribute("name", propertyName));
+            propertyElement.addAttribute(new Attribute("value", properties.getProperty(propertyName)));
             xmlElement.addElement(propertyElement);
         }
     }

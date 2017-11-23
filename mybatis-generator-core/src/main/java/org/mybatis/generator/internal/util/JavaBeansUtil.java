@@ -61,11 +61,10 @@ public class JavaBeansUtil {
             }
         }
 
-        if (fullyQualifiedJavaType.equals(FullyQualifiedJavaType
-                .getBooleanPrimitiveInstance())) {
-            sb.insert(0, "is"); //$NON-NLS-1$
+        if (fullyQualifiedJavaType.equals(FullyQualifiedJavaType.getBooleanPrimitiveInstance())) {
+            sb.insert(0, "is");
         } else {
-            sb.insert(0, "get"); //$NON-NLS-1$
+            sb.insert(0, "get");
         }
 
         return sb.toString();
@@ -89,13 +88,12 @@ public class JavaBeansUtil {
             }
         }
 
-        sb.insert(0, "set"); //$NON-NLS-1$
+        sb.insert(0, "set");
 
         return sb.toString();
     }
 
-    public static String getCamelCaseString(String inputString,
-            boolean firstCharacterUppercase) {
+    public static String getCamelCaseString(String inputString, boolean firstCharacterUppercase) {
         StringBuilder sb = new StringBuilder();
 
         boolean nextUpperCase = false;
@@ -115,7 +113,6 @@ public class JavaBeansUtil {
                     nextUpperCase = true;
                 }
                 break;
-
             default:
                 if (nextUpperCase) {
                     sb.append(Character.toUpperCase(c));
@@ -170,10 +167,8 @@ public class JavaBeansUtil {
         } else if (inputString.length() < 2) {
             answer = inputString.toLowerCase(Locale.US);
         } else {
-            if (Character.isUpperCase(inputString.charAt(0))
-                    && !Character.isUpperCase(inputString.charAt(1))) {
-                answer = inputString.substring(0, 1).toLowerCase(Locale.US)
-                        + inputString.substring(1);
+            if (Character.isUpperCase(inputString.charAt(0)) && !Character.isUpperCase(inputString.charAt(1))) {
+                answer = inputString.substring(0, 1).toLowerCase(Locale.US) + inputString.substring(1);
             } else {
                 answer = inputString;
             }
@@ -193,11 +188,10 @@ public class JavaBeansUtil {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(fqjt);
         method.setName(getGetterMethodName(property, fqjt));
-        context.getCommentGenerator().addGetterComment(method,
-                introspectedTable, introspectedColumn);
+        context.getCommentGenerator().addGetterComment(method,introspectedTable, introspectedColumn);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("return "); //$NON-NLS-1$
+        sb.append("return ");
         sb.append(property);
         sb.append(';');
         method.addBodyLine(sb.toString());
@@ -216,8 +210,7 @@ public class JavaBeansUtil {
         field.setVisibility(JavaVisibility.PRIVATE);
         field.setType(fqjt);
         field.setName(property);
-        context.getCommentGenerator().addFieldComment(field,
-                introspectedTable, introspectedColumn);
+        context.getCommentGenerator().addFieldComment(field,introspectedTable, introspectedColumn);
 
         return field;
     }
@@ -225,31 +218,29 @@ public class JavaBeansUtil {
     public static Method getJavaBeansSetter(IntrospectedColumn introspectedColumn,
             Context context,
             IntrospectedTable introspectedTable) {
-        FullyQualifiedJavaType fqjt = introspectedColumn
-                .getFullyQualifiedJavaType();
+        FullyQualifiedJavaType fqjt = introspectedColumn.getFullyQualifiedJavaType();
         String property = introspectedColumn.getJavaProperty();
 
         Method method = new Method();
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setName(getSetterMethodName(property));
         method.addParameter(new Parameter(fqjt, property));
-        context.getCommentGenerator().addSetterComment(method,
-                introspectedTable, introspectedColumn);
+        context.getCommentGenerator().addSetterComment(method, introspectedTable, introspectedColumn);
 
         StringBuilder sb = new StringBuilder();
         if (introspectedColumn.isStringColumn() && isTrimStringsEnabled(introspectedColumn)) {
-            sb.append("this."); //$NON-NLS-1$
+            sb.append("this.");
             sb.append(property);
-            sb.append(" = "); //$NON-NLS-1$
+            sb.append(" = ");
             sb.append(property);
-            sb.append(" == null ? null : "); //$NON-NLS-1$
+            sb.append(" == null ? null : ");
             sb.append(property);
-            sb.append(".trim();"); //$NON-NLS-1$
+            sb.append(".trim();");
             method.addBodyLine(sb.toString());
         } else {
-            sb.append("this."); //$NON-NLS-1$
+            sb.append("this.");
             sb.append(property);
-            sb.append(" = "); //$NON-NLS-1$
+            sb.append(" = ");
             sb.append(property);
             sb.append(';');
             method.addBodyLine(sb.toString());
@@ -259,10 +250,8 @@ public class JavaBeansUtil {
     }
 
     private static boolean isTrimStringsEnabled(Context context) {
-        Properties properties = context
-                .getJavaModelGeneratorConfiguration().getProperties();
-        boolean rc = isTrue(properties
-                .getProperty(PropertyRegistry.MODEL_GENERATOR_TRIM_STRINGS));
+        Properties properties = context.getJavaModelGeneratorConfiguration().getProperties();
+        boolean rc = isTrue(properties.getProperty(PropertyRegistry.MODEL_GENERATOR_TRIM_STRINGS));
         return rc;
     }
 

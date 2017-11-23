@@ -24,20 +24,15 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
  */
 public class CommentGeneratorConfiguration extends TypedPropertyHolder {
 
-    /**
-     * 
-     */
     public CommentGeneratorConfiguration() {
     }
 
     public XmlElement toXmlElement() {
-        XmlElement answer = new XmlElement("commentGenerator"); //$NON-NLS-1$
+        XmlElement answer = new XmlElement("commentGenerator");
         if (getConfigurationType() != null) {
-            answer.addAttribute(new Attribute("type", getConfigurationType())); //$NON-NLS-1$
+            answer.addAttribute(new Attribute("type", getConfigurationType()));
         }
-
         addPropertyXmlElements(answer);
-
         return answer;
     }
 }

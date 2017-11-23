@@ -20,15 +20,10 @@ import static org.mybatis.generator.internal.util.messages.Messages.getString;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import org.mybatis.generator.config.Configuration;
+import org.mybatis.generator.config.Context;
 import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.mybatis.generator.exception.InvalidConfigurationException;
 import org.mybatis.generator.exception.XMLParserException;
@@ -37,51 +32,57 @@ import org.mybatis.generator.logging.LogFactory;
 
 /**
  * This class allows the code generator to be run from the command line.
- * 
  * @author Jeff Butler
  */
 public class ShellRunner {
-    private static final String CONFIG_FILE = "-configfile"; //$NON-NLS-1$
-    private static final String OVERWRITE = "-overwrite"; //$NON-NLS-1$
-    private static final String CONTEXT_IDS = "-contextids"; //$NON-NLS-1$
-    private static final String TABLES = "-tables"; //$NON-NLS-1$
-    private static final String VERBOSE = "-verbose"; //$NON-NLS-1$
-    private static final String FORCE_JAVA_LOGGING = "-forceJavaLogging"; //$NON-NLS-1$
-    private static final String HELP_1 = "-?"; //$NON-NLS-1$
-    private static final String HELP_2 = "-h"; //$NON-NLS-1$
+
+    /** 配置文件路径 */
+    private static final String CONFIG_FILE = "-configfile";
+    /** 是否覆盖java文件 */
+    private static final String OVERWRITE = "-overwrite";
+    /** 指定contextIDs*/
+    private static final String CONTEXT_IDS = "-contextids";
+    /** 指定数据库表名*/
+    private static final String TABLES = "-tables";
+    /** 是否启用冗余回调*/
+    private static final String VERBOSE = "-verbose";
+    /** 是否强制输出java日志*/
+    private static final String FORCE_JAVA_LOGGING = "-forceJavaLogging";
+    /** 帮助命令？*/
+    private static final String HELP_1 = "-?";
+    /** 帮助命令h*/
+    private static final String HELP_2 = "-h";
 
     public static void main(String[] args) {
+
         if (args.length == 0) {
             usage();
             System.exit(0);
-            return; // only to satisfy compiler, never returns
-        }
-
-        Map<String, String> arguments = parseCommandLine(args);
-
-        if (arguments.containsKey(HELP_1)) {
-            usage();
-            System.exit(0);
-            return; // only to satisfy compiler, never returns
-        }
-
-        if (!arguments.containsKey(CONFIG_FILE)) {
-            writeLine(getString("RuntimeError.0")); //$NON-NLS-1$
             return;
         }
 
-        List<String> warnings = new ArrayList<String>();
+        Map<String, String> arguments = parseCommandLine(args);
+        if (arguments.containsKey(HELP_1) || arguments.containsKey(HELP_2)) {
+            usage();
+            System.exit(0);
+            return;
+        }
+
+        if (!arguments.containsKey(CONFIG_FILE)) {
+            writeLine(getString("RuntimeError.0"));
+            return;
+        }
 
         String configfile = arguments.get(CONFIG_FILE);
         File configurationFile = new File(configfile);
         if (!configurationFile.exists()) {
-            writeLine(getString("RuntimeError.1", configfile)); //$NON-NLS-1$
+            writeLine(getString("RuntimeError.1", configfile));
             return;
         }
 
-        Set<String> fullyqualifiedTables = new HashSet<String>();
+        Set<String> fullyqualifiedTables = new HashSet<>();
         if (arguments.containsKey(TABLES)) {
-            StringTokenizer st = new StringTokenizer(arguments.get(TABLES), ","); //$NON-NLS-1$
+            StringTokenizer st = new StringTokenizer(arguments.get(TABLES), ",");
             while (st.hasMoreTokens()) {
                 String s = st.nextToken().trim();
                 if (s.length() > 0) {
@@ -90,10 +91,9 @@ public class ShellRunner {
             }
         }
 
-        Set<String> contexts = new HashSet<String>();
+        Set<String> contexts = new HashSet<>();
         if (arguments.containsKey(CONTEXT_IDS)) {
-            StringTokenizer st = new StringTokenizer(
-                    arguments.get(CONTEXT_IDS), ","); //$NON-NLS-1$
+            StringTokenizer st = new StringTokenizer(arguments.get(CONTEXT_IDS), ",");
             while (st.hasMoreTokens()) {
                 String s = st.nextToken().trim();
                 if (s.length() > 0) {
@@ -102,17 +102,39 @@ public class ShellRunner {
             }
         }
 
+        // 生成代码过程中的警告信息
+        List<String> warnings = new ArrayList<>();
         try {
+            // 解析配置文件
             ConfigurationParser cp = new ConfigurationParser(warnings);
             Configuration config = cp.parseConfiguration(configurationFile);
-            boolean isJavaOverwrite = "true".equals(config.getContexts().get(0).getProperty("isJavaOverwrite"));
-            boolean isJavaMerge = "true".equals(config.getContexts().get(0).getProperty("isJavaMerge"));
+
+            // 全局配置添加到context
+            List<Context> list = config.getContexts();
+            if (list != null && !list.isEmpty()){
+                for (Context context : list){
+                    Set<Map.Entry<Object, Object>> set = Configuration.properties.entrySet();
+                    if (!set.isEmpty()){
+                        Iterator<Map.Entry<Object, Object>> iter = set.iterator();
+                        while (iter.hasNext()){
+                            Map.Entry<Object, Object> entry = iter.next();
+                            context.addProperty((String) entry.getKey(), (String) entry.getValue());
+                        }
+                    }
+                }
+            }
+
+            // 判断是否合并或者是覆盖java文件
+            boolean isJavaOverwrite = "true".equals(Configuration.properties.getProperty("isJavaOverwrite"));
+            boolean isJavaMerge = "true".equals(Configuration.properties.getProperty("isJavaMerge"));
             DefaultShellCallback shellCallback = new DefaultShellCallback(isJavaOverwrite, isJavaMerge);
+
             MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, shellCallback, warnings);
             ProgressCallback progressCallback = arguments.containsKey(VERBOSE) ? new VerboseProgressCallback() : null;
             myBatisGenerator.generate(progressCallback, contexts, fullyqualifiedTables);
+
         } catch (XMLParserException e) {
-            writeLine(getString("Progress.3")); //$NON-NLS-1$
+            writeLine(getString("Progress.3"));
             writeLine();
             for (String error : e.getErrors()) {
                 writeLine(error);
@@ -125,13 +147,13 @@ public class ShellRunner {
             e.printStackTrace();
             return;
         } catch (InvalidConfigurationException e) {
-            writeLine(getString("Progress.16")); //$NON-NLS-1$
+            writeLine(getString("Progress.16"));
             for (String error : e.getErrors()) {
                 writeLine(error);
             }
             return;
         } catch (InterruptedException e) {
-            // ignore (will never happen with the DefaultShellCallback)
+
         }
 
         for (String warning : warnings) {
@@ -139,18 +161,18 @@ public class ShellRunner {
         }
 
         if (warnings.size() == 0) {
-            writeLine(getString("Progress.4")); //$NON-NLS-1$
+            writeLine(getString("Progress.4"));
         } else {
             writeLine();
-            writeLine(getString("Progress.5")); //$NON-NLS-1$
+            writeLine(getString("Progress.5"));
         }
     }
 
     private static void usage() {
-        String lines = getString("Usage.Lines"); //$NON-NLS-1$
+        String lines = getString("Usage.Lines");
         int intLines = Integer.parseInt(lines);
         for (int i = 0; i < intLines; i++) {
-            String key = "Usage." + i; //$NON-NLS-1$
+            String key = "Usage." + i;
             writeLine(getString(key));
         }
     }
@@ -172,39 +194,35 @@ public class ShellRunner {
                 if ((i + 1) < args.length) {
                     arguments.put(CONFIG_FILE, args[i + 1]);
                 } else {
-                    errors.add(getString(
-                            "RuntimeError.19", CONFIG_FILE)); //$NON-NLS-1$
+                    errors.add(getString("RuntimeError.19", CONFIG_FILE));
                 }
                 i++;
             } else if (OVERWRITE.equalsIgnoreCase(args[i])) {
-                arguments.put(OVERWRITE, "Y"); //$NON-NLS-1$
+                arguments.put(OVERWRITE, "Y");
             } else if (VERBOSE.equalsIgnoreCase(args[i])) {
-                arguments.put(VERBOSE, "Y"); //$NON-NLS-1$
+                arguments.put(VERBOSE, "Y");
             } else if (HELP_1.equalsIgnoreCase(args[i])) {
-                arguments.put(HELP_1, "Y"); //$NON-NLS-1$
+                arguments.put(HELP_1, "Y");
             } else if (HELP_2.equalsIgnoreCase(args[i])) {
-                // put HELP_1 in the map here too - so we only
-                // have to check for one entry in the mainline
-                arguments.put(HELP_1, "Y"); //$NON-NLS-1$
+                arguments.put(HELP_1, "Y");
             } else if (FORCE_JAVA_LOGGING.equalsIgnoreCase(args[i])) {
                 LogFactory.forceJavaLogging();
             } else if (CONTEXT_IDS.equalsIgnoreCase(args[i])) {
                 if ((i + 1) < args.length) {
                     arguments.put(CONTEXT_IDS, args[i + 1]);
                 } else {
-                    errors.add(getString(
-                            "RuntimeError.19", CONTEXT_IDS)); //$NON-NLS-1$
+                    errors.add(getString("RuntimeError.19", CONTEXT_IDS));
                 }
                 i++;
             } else if (TABLES.equalsIgnoreCase(args[i])) {
                 if ((i + 1) < args.length) {
                     arguments.put(TABLES, args[i + 1]);
                 } else {
-                    errors.add(getString("RuntimeError.19", TABLES)); //$NON-NLS-1$
+                    errors.add(getString("RuntimeError.19", TABLES));
                 }
                 i++;
             } else {
-                errors.add(getString("RuntimeError.20", args[i])); //$NON-NLS-1$
+                errors.add(getString("RuntimeError.20", args[i]));
             }
         }
 

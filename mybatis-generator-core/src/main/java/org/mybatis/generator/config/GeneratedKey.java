@@ -78,63 +78,52 @@ public class GeneratedKey {
     /**
      * This method is used by the iBATIS2 generators to know if the XML &lt;selectKey&gt; element should be placed before the
      * insert SQL statement.
-     *
      * @return true, if is placed before insert in ibatis2
      */
     public boolean isPlacedBeforeInsertInIbatis2() {
         boolean rc;
-
         if (stringHasValue(type)) {
             rc = true;
         } else {
             rc = !isIdentity;
         }
-
         return rc;
     }
 
     public String getMyBatis3Order() {
-        return isIdentity ? "AFTER" : "BEFORE"; //$NON-NLS-1$ //$NON-NLS-2$
+        return isIdentity ? "AFTER" : "BEFORE";
     }
 
     public XmlElement toXmlElement() {
-        XmlElement xmlElement = new XmlElement("generatedKey"); //$NON-NLS-1$
-        xmlElement.addAttribute(new Attribute("column", column)); //$NON-NLS-1$
-        xmlElement.addAttribute(new Attribute(
-                "sqlStatement", configuredSqlStatement)); //$NON-NLS-1$
+        XmlElement xmlElement = new XmlElement("generatedKey");
+        xmlElement.addAttribute(new Attribute("column", column));
+        xmlElement.addAttribute(new Attribute("sqlStatement", configuredSqlStatement));
         if (stringHasValue(type)) {
-            xmlElement.addAttribute(new Attribute("type", type)); //$NON-NLS-1$
+            xmlElement.addAttribute(new Attribute("type", type));
         }
-        xmlElement.addAttribute(new Attribute("identity", //$NON-NLS-1$
-                isIdentity ? "true" : "false")); //$NON-NLS-1$ //$NON-NLS-2$
-
+        xmlElement.addAttribute(new Attribute("identity",isIdentity ? "true" : "false"));
         return xmlElement;
     }
 
     public void validate(List<String> errors, String tableName) {
         if (!stringHasValue(runtimeSqlStatement)) {
-            errors.add(getString("ValidationError.7", //$NON-NLS-1$
-                    tableName));
+            errors.add(getString("ValidationError.7",tableName));
         }
 
-        if (stringHasValue(type)
-                && !"pre".equals(type)
-                && !"post".equals(type)) { //$NON-NLS-1$ //$NON-NLS-2$
-            errors.add(getString("ValidationError.15", tableName)); //$NON-NLS-1$
+        if (stringHasValue(type) && !"pre".equals(type) && !"post".equals(type)) {
+            errors.add(getString("ValidationError.15", tableName));
         }
 
-        if ("pre".equals(type) && isIdentity) { //$NON-NLS-1$
-            errors.add(getString("ValidationError.23", //$NON-NLS-1$
-                    tableName));
+        if ("pre".equals(type) && isIdentity) {
+            errors.add(getString("ValidationError.23",tableName));
         }
 
-        if ("post".equals(type) && !isIdentity) { //$NON-NLS-1$
-            errors.add(getString("ValidationError.24", //$NON-NLS-1$
-                    tableName));
+        if ("post".equals(type) && !isIdentity) {
+            errors.add(getString("ValidationError.24",tableName));
         }
     }
 
     public boolean isJdbcStandard() {
-        return "JDBC".equals(runtimeSqlStatement); //$NON-NLS-1$
+        return "JDBC".equals(runtimeSqlStatement);
     }
 }

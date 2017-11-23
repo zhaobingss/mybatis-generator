@@ -49,9 +49,7 @@ public class DefaultShellCallback implements ShellCallback {
 
     /**
      * Instantiates a new default shell callback.
-     *
      * @param overwrite
-     *            the overwrite
      */
     public DefaultShellCallback(boolean overwrite, boolean isJavaMerge) {
         super();
@@ -59,12 +57,8 @@ public class DefaultShellCallback implements ShellCallback {
         this.isJavaMerge = isJavaMerge;
     }
 
-    /* (non-Javadoc)
-     * @see org.mybatis.generator.api.ShellCallback#getDirectory(java.lang.String, java.lang.String)
-     */
     @Override
-    public File getDirectory(String targetProject, String targetPackage)
-            throws ShellException {
+    public File getDirectory(String targetProject, String targetPackage)throws ShellException {
         // targetProject is interpreted as a directory that must exist
         //
         // targetPackage is interpreted as a sub directory, but in package
@@ -74,12 +68,11 @@ public class DefaultShellCallback implements ShellCallback {
 
         File project = new File(targetProject);
         if (!project.isDirectory()) {
-            throw new ShellException(getString("Warning.9", //$NON-NLS-1$
-                    targetProject));
+            throw new ShellException(getString("Warning.9",targetProject));
         }
 
         StringBuilder sb = new StringBuilder();
-        StringTokenizer st = new StringTokenizer(targetPackage, "."); //$NON-NLS-1$
+        StringTokenizer st = new StringTokenizer(targetPackage, ".");
         while (st.hasMoreTokens()) {
             sb.append(st.nextToken());
             sb.append(File.separatorChar);
@@ -89,45 +82,29 @@ public class DefaultShellCallback implements ShellCallback {
         if (!directory.isDirectory()) {
             boolean rc = directory.mkdirs();
             if (!rc) {
-                throw new ShellException(getString("Warning.10", //$NON-NLS-1$
-                        directory.getAbsolutePath()));
+                throw new ShellException(getString("Warning.10",directory.getAbsolutePath()));
             }
         }
 
         return directory;
     }
 
-    /* (non-Javadoc)
-     * @see org.mybatis.generator.api.ShellCallback#refreshProject(java.lang.String)
-     */
     @Override
     public void refreshProject(String project) {
-        // nothing to do in the default shell callback
     }
 
-    /* (non-Javadoc)
-     * @see org.mybatis.generator.api.ShellCallback#isMergeSupported()
-     */
     @Override
     public boolean isMergeSupported() {
-        return isJavaMerge;// 注意这个的修改
+        return isJavaMerge;
     }
 
-    /* (non-Javadoc)
-     * @see org.mybatis.generator.api.ShellCallback#isOverwriteEnabled()
-     */
     @Override
     public boolean isOverwriteEnabled() {
         return overwrite;
     }
 
-    /* (non-Javadoc)
-     * @see org.mybatis.generator.api.ShellCallback#mergeJavaFile(java.lang.String, java.lang.String, java.lang.String[], java.lang.String)
-     */
     @Override
-    public String mergeJavaFile(String newFileSource,
-            File existingFile, String[] javadocTags, String fileEncoding)
-            throws ShellException {
+    public String mergeJavaFile(String newFileSource,File existingFile, String[] javadocTags, String fileEncoding)throws ShellException {
         try {
         	String source = getNewJavaFile(newFileSource, existingFile);
         	return source;
@@ -213,7 +190,7 @@ public class DefaultShellCallback implements ShellCallback {
         }
         sb.append(lineSeparator);
   
-        //合并methods  
+        //合并methods
         List<MethodDeclaration> newMethods = newType.getMethods();
         List<MethodDeclaration> oldMethods = oldType.getMethods();  
         List<MethodDeclaration> cmpMethods = new ArrayList<MethodDeclaration>(newMethods);
