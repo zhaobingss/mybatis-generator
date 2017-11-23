@@ -95,6 +95,7 @@ public class TableConfiguration extends PropertyHolder {
 
     private List<OneToOne> oneToOnes=new ArrayList<OneToOne>();
     private List<OneToMany> oneToManys=new ArrayList<OneToMany>();
+    private List<ManyToMany> manyToManys=new ArrayList<ManyToMany>();
 
     public List<OneToOne> getOneToOnes() {
         return oneToOnes;
@@ -106,6 +107,14 @@ public class TableConfiguration extends PropertyHolder {
 
     public List<OneToMany> getOneToManys() {
         return oneToManys;
+    }
+
+    public List<ManyToMany> getManyToManys() {
+        return manyToManys;
+    }
+
+    public void setManyToManys(List<ManyToMany> manyToManys) {
+        this.manyToManys = manyToManys;
     }
 
     public void setOneToManys(List<OneToMany> oneToManys) {

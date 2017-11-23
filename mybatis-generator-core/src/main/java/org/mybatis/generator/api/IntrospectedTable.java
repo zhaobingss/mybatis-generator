@@ -125,6 +125,8 @@ public abstract class IntrospectedTable {
 
     private List<OneToOne> oneToOnes=new ArrayList<OneToOne>();
     private List<OneToMany> oneToManys=new ArrayList<OneToMany>();
+    private List<ManyToMany> manyToManys=new ArrayList<ManyToMany>();
+
 
     public List<OneToOne> getOneToOnes() {
         if (oneToOnes.isEmpty()){
@@ -146,6 +148,17 @@ public abstract class IntrospectedTable {
 
     public void setOneToManys(List<OneToMany> oneToManys) {
         this.oneToManys = oneToManys;
+    }
+
+    public List<ManyToMany> getManyToManys() {
+        if (manyToManys.isEmpty()){
+            manyToManys = tableConfiguration.getManyToManys();
+        }
+        return manyToManys;
+    }
+
+    public void setManyToManys(List<ManyToMany> manyToManys) {
+        this.manyToManys = manyToManys;
     }
 
     public IntrospectedTable(TargetRuntime targetRuntime) {

@@ -150,7 +150,7 @@
   The table element is used to specify a database table that will be the source information
   for a set of generated objects.
 -->
-<!ELEMENT table (property*, generatedKey?, domainObjectRenamingRule?, columnRenamingRule?, (columnOverride | ignoreColumn | oneToOne | oneToMany| ignoreColumnsByRegex)*) >
+<!ELEMENT table (property*, generatedKey?, domainObjectRenamingRule?, columnRenamingRule?, (columnOverride | ignoreColumn | oneToOne | oneToMany| manyToMany | ignoreColumnsByRegex)*) >
 <!ATTLIST table
   catalog CDATA #IMPLIED
   schema CDATA #IMPLIED
@@ -212,6 +212,17 @@
 	mappingTable CDATA #REQUIRED
 	column CDATA #REQUIRED
 	joinColumn CDATA #REQUIRED
+	where CDATA #IMPLIED>
+
+<!-- 一对多 -->
+<!ELEMENT manyToMany EMPTY>
+<!ATTLIST manyToMany
+	mappingTable CDATA #REQUIRED
+	column CDATA #REQUIRED
+	joinColumn CDATA #REQUIRED
+	relateTable CDATA #REQUIRED
+	relateColumn CDATA #REQUIRED
+	relateJoinColumn CDATA #REQUIRED
 	where CDATA #IMPLIED>
 
 <!--
