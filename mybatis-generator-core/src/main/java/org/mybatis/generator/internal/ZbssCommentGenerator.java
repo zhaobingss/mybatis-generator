@@ -55,10 +55,12 @@ public class ZbssCommentGenerator implements CommentGenerator {
 		currentDateStr = (new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
 	}
 
+	@Override
 	public void addJavaFileComment(CompilationUnit compilationUnit) {
 		return;
 	}
 
+	@Override
 	public void addComment(XmlElement xmlElement) {
 		if (suppressAllComments) {
             return;
@@ -69,6 +71,7 @@ public class ZbssCommentGenerator implements CommentGenerator {
 	public void addRootComment(XmlElement rootElement) {
 	}
 
+	@Override
 	public void addConfigurationProperties(Properties properties) {
 		this.properties.putAll(properties);
 		suppressDate = isTrue(properties.getProperty(PropertyRegistry.COMMENT_GENERATOR_SUPPRESS_DATE));
@@ -105,8 +108,9 @@ public class ZbssCommentGenerator implements CommentGenerator {
 	public void addEnumComment(InnerEnum innerEnum, IntrospectedTable introspectedTable) {
 	}
 
+	@Override
 	public void addFieldComment(Field field, IntrospectedTable introspectedTable,
-			IntrospectedColumn introspectedColumn) {
+								IntrospectedColumn introspectedColumn) {
 		if (suppressAllComments) {
 			return;
 		}
@@ -117,6 +121,7 @@ public class ZbssCommentGenerator implements CommentGenerator {
 		field.addJavaDocLine(sb.toString().trim().replace("\n", " "));
 	}
 
+	@Override
 	public void addFieldComment(Field field, IntrospectedTable introspectedTable) {
 		if (suppressAllComments) {
 			return;
@@ -128,6 +133,7 @@ public class ZbssCommentGenerator implements CommentGenerator {
 		field.addJavaDocLine(sb.toString().trim().replace("\n", " "));
 	}
 
+	@Override
 	public void addGeneralMethodComment(Method method, IntrospectedTable introspectedTable) {
 		if (suppressAllComments) {
 			return;
@@ -135,16 +141,18 @@ public class ZbssCommentGenerator implements CommentGenerator {
 		method.addJavaDocLine("/**"+MergeConstants.NEW_ELEMENT_TAG+" */");
 	}
 
+	@Override
 	public void addGetterComment(Method method, IntrospectedTable introspectedTable,
-			IntrospectedColumn introspectedColumn) {
+								 IntrospectedColumn introspectedColumn) {
 		if (suppressAllComments) {
 			return;
 		}
 		method.addJavaDocLine("/**"+MergeConstants.NEW_ELEMENT_TAG+" */");
 	}
 
+	@Override
 	public void addSetterComment(Method method, IntrospectedTable introspectedTable,
-			IntrospectedColumn introspectedColumn) {
+								 IntrospectedColumn introspectedColumn) {
 		if (suppressAllComments) {
 			return;
 		}

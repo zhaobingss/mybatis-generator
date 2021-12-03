@@ -1,0 +1,5 @@
+/.idea/
+/dist/
+/.DS_Store
+/mybatis-generator-core/mybatis-generator-core.iml
+/mybatis-generator.iml

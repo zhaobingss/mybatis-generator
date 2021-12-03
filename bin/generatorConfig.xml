@@ -1,50 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE generatorConfiguration
   PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
-  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+	"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-
+	<!-- 生成文件编码 -->
+	<property name="javaFileEncoding" value="UTF-8"/>
 	<!-- 是否合并生成的xml文件和已有的xml -->
 	<property name="isXmlMerge" value="true"/>
 	<!-- 是否覆盖java文件 -->
 	<property name="isJavaOverwrite" value="true"/>
 	<!-- 是否合并java文件 -->
 	<property name="isJavaMerge" value="true"/>
-	<!-- 生成文件编码 -->
-	<property name="javaFileEncoding" value="UTF-8"/>
 
 	<!--数据库驱动 -->
-	<classPathEntry location="mysql-connector-java-5.1.40.jar" />
-	
-	<!-- 一个连接数据库的上下文环境 -->
-	<context id="MysqlTables" targetRuntime="MyBatis3">
+	<classPathEntry location="mysql-connector-java-8.0.26.jar" />
+	<context id="MysqlTables" targetRuntime="MyBatis3Simple">
+
 		<!-- mysql关键字加反单引号 -->
 		<property name="autoDelimitKeywords" value="true"/>
 		<property name="beginningDelimiter" value="`"/>
 		<property name="endingDelimiter" value="`"/>
-		
-		<property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
-		
-		<!-- 生成JPA注解 -->
+		<property name="useTkMapper" value="true"/>
+
+		<!-- 生成JPA注解
 		<plugin type="org.mybatis.generator.plugins.JpaAnnotionPlugin"/>
+		-->
+		<!-- 批量插入插件 -->
+<!--		<plugin type="org.mybatis.generator.plugins.BatchInsertPlugin"/>-->
 		<!-- 一对一插件 -->
-		<plugin type="org.mybatis.generator.plugins.OneToOnePlugin"/>
+<!--		<plugin type="org.mybatis.generator.plugins.OneToOnePlugin"/>-->
 		<!-- 一对多插件 -->
-		<plugin type="org.mybatis.generator.plugins.OneToManyPlugin"/>
-		<!--生成带RowBounds的方法
+<!--		<plugin type="org.mybatis.generator.plugins.OneToManyPlugin"/>-->
+		<!-- 多对多插件 -->
+<!--		<plugin type="org.mybatis.generator.plugins.ManyToManyPlugin"/>-->
+		<!-- 实现序列化接口插件 -->
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+		<!-- tkMapper -->
+		<plugin type="org.mybatis.generator.plugins.TkMapperPlugin"/>
+		<!-- JPA -->
+		<plugin type="org.mybatis.generator.plugins.JpaAnnotionPlugin"/>
+
+		<!--生成带RowBounds的selectByExample方法
 		<plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
 		-->
-		
-		<!-- 自定义注释生成器 -->
+
+		<!-- 注释生成 -->
 		<commentGenerator type="org.mybatis.generator.internal.ZbssCommentGenerator">
 			<property name="suppressDate" value="true" />
 			<property name="suppressAllComments" value="false" />
 		</commentGenerator>
-		
-		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://localhost:3306/travel_gds_qihang"
-			userId="qihang668"
-			password="QiHang!@#">
+
+		<!-- jdbc mysql -->
+		<jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+			connectionURL="jdbc:mysql://39.98.178.149:13306/travel_gds_manager?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false"
+			userId="test"
+			password="123456">
 		</jdbcConnection>
 		
 		<javaTypeResolver>
@@ -52,44 +62,148 @@
 		</javaTypeResolver>
 		
 		<!--生成Model类存放位置 -->
-		<javaModelGenerator targetPackage="com.diandong.web.manager.pojo" targetProject="src">
+		<javaModelGenerator targetPackage="com.fetx.gds.knvendor.pojo" targetProject="../dist/java">
 			<property name="enableSubPackages" value="true" />
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 		
 		<!--生成映射文件存放位置 -->
-		<sqlMapGenerator targetPackage="mapper" targetProject="src">
+		<sqlMapGenerator targetPackage="mapper" targetProject="../dist/resources">
 			<property name="enableSubPackages" value="true" />
 		</sqlMapGenerator>
 		
 		<!--生成Mapper接口类存放位置 -->
-		<javaClientGenerator type="XMLMAPPER" targetPackage="com.diandong.web.manager.dao" targetProject="src">
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.fetx.gds.knvendor.dao" targetProject="../dist/java">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
-		
-		<!--
-		<table tableName="price_operate" domainObjectName="PriceOperate"
+
+		<!-- 数据库表和实体的对应 -->
+		<!--主订单信息-->
+		<!--<table tableName="order_main" domainObjectName="OrderMain"
 			enableCountByExample="false" enableUpdateByExample="true"
 			enableDeleteByExample="true" enableSelectByExample="true"
 			selectByExampleQueryId="false">
-		</table>
-		-->
-
-		<table tableName="sy_user" domainObjectName="User"
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+			<oneToOne mappingTable="order_frm" column="id" joinColumn="order_id" where=""/>
+			<oneToMany mappingTable="order_passenger" column="id" joinColumn="order_id" where=""/>
+		</table>-->
+		<!--订单详情-->
+		<!--<table tableName="order_frm" domainObjectName="OrderFrm"
+			enableCountByExample="false" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+		</table>-->
+		<!--票号信息-->
+		<!--<table tableName="order_ticket" domainObjectName="OrderTicket"
+			enableCountByExample="false" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+		</table>-->
+		<!--票号信息-->
+		<!--<table tableName="order_log" domainObjectName="OrderLog"
+			enableCountByExample="false" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+			<columnOverride column="operate_detail" jdbcType="VARCHAR"/>
+			<columnOverride column="operate_req" jdbcType="VARCHAR"/>
+			<columnOverride column="operate_rsp" jdbcType="VARCHAR"/>
+			<columnOverride column="remark" jdbcType="VARCHAR"/>
+		</table>-->
+		<!--退票信息-->
+		<!--<table tableName="order_refund" domainObjectName="OrderRefund"
 			   enableCountByExample="false" enableUpdateByExample="true"
 			   enableDeleteByExample="true" enableSelectByExample="true"
 			   selectByExampleQueryId="false">
 			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-			<manyToMany mappingTable="sy_role" column="id" joinColumn="id" relateTable="sy_role_user" relateColumn="uid" relateJoinColumn="rid" where="" />
-		</table>
-		<table tableName="sy_role" domainObjectName="Role"
+		</table>-->
+		<!--乘客信息-->
+		<!--<table tableName="order_passenger" domainObjectName="OrderPassenger"
 			   enableCountByExample="false" enableUpdateByExample="true"
 			   enableDeleteByExample="true" enableSelectByExample="true"
 			   selectByExampleQueryId="false">
 			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-			<manyToMany mappingTable="sy_user" column="id" joinColumn="id" relateTable="sy_role_user" relateColumn="rid" relateJoinColumn="uid" where="" />
+		</table>-->
+		<!--退票单乘客信息-->
+		<!--<table tableName="order_refund_passenger" domainObjectName="OrderRefundPassenger"
+			   enableCountByExample="false" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+		</table>-->
+
+		<!--<table tableName="order_use_policy" domainObjectName="OrderUsePolicy"
+			   enableCountByExample="false" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+		</table>-->
+		<!--<table tableName="order_channel_price" domainObjectName="OrderChannelPrice"
+			   enableCountByExample="false" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+			<columnOverride column="data" jdbcType="VARCHAR"/>
+			<columnOverride column="failed_msg" jdbcType="VARCHAR"/>
+		</table>-->
+		<!--<table tableName="order_use_segment_fee" domainObjectName="OrderUseSegmentFee"
+			   enableCountByExample="false" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+		</table>-->
+
+		<!--<table tableName="order_addons" domainObjectName="OrderAddons"
+			   enableCountByExample="false" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+		</table>-->
+		<!--<table tableName="order_use_operate" domainObjectName="OrderUseOperate"
+			   enableCountByExample="false" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+		</table>-->
+		<!--<table tableName="order_pay_info" domainObjectName="OrderPayInfo"
+			   enableCountByExample="false" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+		</table>-->
+		<!--<table tableName="order_endorse" domainObjectName="OrderEndorse"
+			   enableCountByExample="false" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+		</table>
+		<table tableName="order_endorse_passenger" domainObjectName="OrderEndorsePassenger"
+			   enableCountByExample="false" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+		</table>
+		<table tableName="order_endorse_segment" domainObjectName="OrderEndorseSegment"
+			   enableCountByExample="false" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+		</table>-->
+		<!-- 订单附加信息 -->
+		<!--<table tableName="order_ext_info" domainObjectName="OrderExtInfo"
+			enableCountByExample="false" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+			<columnOverride column="from_data" jdbcType="VARCHAR"/>
+			<columnOverride column="ret_data" jdbcType="VARCHAR"/>
+		</table>-->
+		<!-- 供应航班信息 -->
+		<table tableName="vendor_flight_info" domainObjectName="VendorFlightInfo">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
 		</table>
 
-		
 	</context>
 </generatorConfiguration>

@@ -52,7 +52,14 @@ public class SimpleXMLMapperGenerator extends AbstractXmlGenerator {
 
         context.getCommentGenerator().addRootComment(answer);
 
+        String useTkMapper = getContext().getProperty("useTkMapper");
+
         addResultMapElement(answer);
+
+        if ("true".equalsIgnoreCase(useTkMapper)) {
+            return answer;
+        }
+
         addDeleteByPrimaryKeyElement(answer);
         addInsertElement(answer);
         addUpdateByPrimaryKeyElement(answer);

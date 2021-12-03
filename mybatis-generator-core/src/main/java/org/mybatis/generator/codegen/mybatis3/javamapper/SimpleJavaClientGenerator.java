@@ -77,11 +77,14 @@ public class SimpleJavaClientGenerator extends AbstractJavaClientGenerator {
             interfaze.addImportedType(fqjt);
         }
 
-        addDeleteByPrimaryKeyMethod(interfaze);
-        addInsertMethod(interfaze);
-        addSelectByPrimaryKeyMethod(interfaze);
-        addSelectAllMethod(interfaze);
-        addUpdateByPrimaryKeyMethod(interfaze);
+        String useTkMapper = getContext().getProperty("useTkMapper");
+        if (!"true".equalsIgnoreCase(useTkMapper)) {
+            addDeleteByPrimaryKeyMethod(interfaze);
+            addInsertMethod(interfaze);
+            addSelectByPrimaryKeyMethod(interfaze);
+            addSelectAllMethod(interfaze);
+            addUpdateByPrimaryKeyMethod(interfaze);
+        }
 
         List<CompilationUnit> answer = new ArrayList<CompilationUnit>();
         if (context.getPlugins().clientGenerated(interfaze, null,
